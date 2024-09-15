@@ -198,24 +198,25 @@ NVIDIA 보드와 아두이노 보드를 연결하여 시리얼 통신을 통해 
    **PySerial 라이브러리**를 사용하여 NVIDIA 보드에서 시리얼 통신을 설정할 수 있다.
 
    **NVIDIA 보드 코드 (Python)**:
-   ```python
-   import serial
-   import time
 
-   # 시리얼 포트 설정 (Jetson Nano의 경우 /dev/ttyTHS1 사용)
-   ser = serial.Serial('/dev/ttyTHS1', 9600, timeout=1)  # 포트, Baud rate 설정
-   time.sleep(2)  # 시리얼 연결 안정 대기
+```python
+import serial
+import time
 
-   while True:
-       # 아두이노로 데이터 전송
-       ser.write(b'Hello Arduino!\n')  # 아두이노로 'Hello Arduino!' 메시지 전송
-       time.sleep(1)
+# 시리얼 포트 설정 (Jetson Nano의 경우 /dev/ttyTHS1 사용)
+ser = serial.Serial('/dev/ttyTHS1', 9600, timeout=1)  # 포트, Baud rate 설정
+time.sleep(2)  # 시리얼 연결 안정 대기
 
-       # 아두이노로부터 데이터 수신
-       if ser.in_waiting > 0:
-           data = ser.readline().decode('utf-8').rstrip()  # 수신한 데이터 디코딩
-           print("Received from Arduino:", data)
-   ```
+while True:
+    # 아두이노로 데이터 전송
+    ser.write(b'Hello Arduino!\n')  # 아두이노로 'Hello Arduino!' 메시지 전송
+    time.sleep(1)
+
+    # 아두이노로부터 데이터 수신
+    if ser.in_waiting > 0:
+        data = ser.readline().decode('utf-8').rstrip()  # 수신한 데이터 디코딩
+        print("Received from Arduino:", data)
+```
 
    - **`/dev/ttyTHS1`**는 NVIDIA 보드에서 사용되는 기본 UART 포트입니다. Jetson Nano의 경우 **ttyTHS1**을 사용하며, 다른 보드일 경우 포트 이름이 다를 수 있으니 보드의 매뉴얼을 참조해야한다.
    - **9600bps**는 일반적인 Baud rate(전송 속도)입니다. 이 속도는 양쪽 보드에서 동일하게 설정되어야 한다.
@@ -225,30 +226,30 @@ NVIDIA 보드와 아두이노 보드를 연결하여 시리얼 통신을 통해 
    아두이노에서는 기본적으로 `Serial` 객체를 사용하여 시리얼 통신을 처리한다.
 
    **아두이노 코드**:
-   
-   ```cpp
-   void setup() {
-     // 시리얼 통신 초기화 (9600bps)
-     Serial.begin(9600);
-     while (!Serial) {
-       ; // 시리얼 포트 연결 대기
-     }
-     Serial.println("Arduino Ready");  // 준비 완료 메시지 전송
-   }
 
-   void loop() {
-     // NVIDIA 보드로부터 데이터 수신
-     if (Serial.available() > 0) {
-       String receivedData = Serial.readStringUntil('\n');  // 데이터 수신
-       Serial.print("Received from Jetson: ");
-       Serial.println(receivedData);  // 수신 데이터 출력
+```cpp
+void setup() {
+  // 시리얼 통신 초기화 (9600bps)
+  Serial.begin(9600);
+  while (!Serial) {
+    ; // 시리얼 포트 연결 대기
+  }
+  Serial.println("Arduino Ready");  // 준비 완료 메시지 전송
+}
 
-       // 응답 메시지 전송
-       Serial.println("Hello Jetson!");  // 응답 데이터 전송
-     }
-     delay(100);
-   }
-   ```
+void loop() {
+  // NVIDIA 보드로부터 데이터 수신
+  if (Serial.available() > 0) {
+    String receivedData = Serial.readStringUntil('\n');  // 데이터 수신
+    Serial.print("Received from Jetson: ");
+    Serial.println(receivedData);  // 수신 데이터 출력
+
+    // 응답 메시지 전송
+    Serial.println("Hello Jetson!");  // 응답 데이터 전송
+  }
+  delay(100);
+}
+```
 
    - **9600bps**로 시리얼 통신을 초기화하고, NVIDIA 보드로부터 받은 데이터를 처리한ㄷ.
    - 아두이노에서 데이터를 받은 후, 다시 응답 메시지를 보내도록 설정되어 있다.
@@ -263,10 +264,10 @@ NVIDIA 보드와 아두이노 보드를 연결하여 시리얼 통신을 통해 
    **Jetson Nano의 UART 설정 방법**:
    - `/boot/extlinux/extlinux.conf` 파일을 수정하여 `cbootargs` 항목에서 **console=none**을 추가하여 UART 포트를 활성화할 수 있다.
 
-   ```bash
-   sudo nano /boot/extlinux/extlinux.conf
-   # cbootargs에서 console=none 추가
-   ```
+```bash
+sudo nano /boot/extlinux/extlinux.conf
+# cbootargs에서 console=none 추가
+```
 
    이렇게 설정한 후, 보드를 재부팅하면 UART 포트를 사용할 수 있다.
 
