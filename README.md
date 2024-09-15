@@ -139,7 +139,7 @@
 ### 1.6 **ESC 초기화**
    대부분의 ESC는 **초기화 과정**이 필요하다. 이 과정에서 아두이노가 ESC에 초기화 신호를 보내고, ESC는 이를 인식하고 설정된다.
 
-```cpp
+```c
 #include <Servo.h>
 
 Servo esc;
@@ -227,7 +227,7 @@ while True:
 
    **아두이노 코드**:
 
-```cpp
+```c
 void setup() {
   // 시리얼 통신 초기화 (9600bps)
   Serial.begin(9600);
