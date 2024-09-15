@@ -225,6 +225,7 @@ NVIDIA 보드와 아두이노 보드를 연결하여 시리얼 통신을 통해 
    아두이노에서는 기본적으로 `Serial` 객체를 사용하여 시리얼 통신을 처리한다.
 
    **아두이노 코드**:
+   
    ```cpp
    void setup() {
      // 시리얼 통신 초기화 (9600bps)
@@ -296,6 +297,7 @@ UDP는 **연결 지향**이 아닌 **비연결성 통신**으로, 데이터그�
 3. UDP를 사용하여 해당 데이터를 **NVIDIA 보드**로 전송한다.
 
 **예시 코드 (라즈베리파이 측, Python UDP 송신자)**:
+
 ```python
 import socket
 import cv2
@@ -344,6 +346,7 @@ sock.close()
 3. 복원된 이미지를 **딥러닝 모델** 또는 **컴퓨터 비전 알고리즘**에 입력해 처리할 수 있다.
 
 **예시 코드 (NVIDIA 보드 측, Python UDP 수신자)**:
+
 ```python
 import socket
 import cv2
